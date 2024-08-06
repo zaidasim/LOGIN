@@ -3,6 +3,8 @@ from django.shortcuts import render,redirect , get_object_or_404
 from .forms import CreateForm
 from .models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import CustomUserCreationForm
 # Create your views here.
 def login_view(request):
     if request.method == 'POST':
@@ -41,3 +43,16 @@ def update(request):
     else:
         form=CreateForm(instance=profile)
     return render(request, 'profile_update.html' , {'form':form})
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been created successfully!')
+            return redirect('login')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'register.html', {'form': form})
