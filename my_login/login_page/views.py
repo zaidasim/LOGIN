@@ -5,6 +5,8 @@ from .models import User
 from django.contrib.auth import get_user_model
 from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import CustomUserCreationForm
 # Create your views here.
 def login_view(request):
     if request.method == 'POST':
@@ -43,6 +45,7 @@ def update(request):
     else:
         form=CreateForm(instance=profile)
     return render(request, 'profile_update.html' , {'form':form})
+<<<<<<< HEAD
 User = get_user_model()
 
 def register(request):
@@ -56,4 +59,18 @@ def register(request):
     else:
         form = UserRegistrationForm()
 
+=======
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been created successfully!')
+            return redirect('login')
+    else:
+        form = CustomUserCreationForm()
+>>>>>>> another_branch
     return render(request, 'register.html', {'form': form})
