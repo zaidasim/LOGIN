@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authentication Page</title>
+</head>
+<body>
+    <h1>Authentication</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if authenticated is not none %}
+        {% if authenticated %}
+            <p style="color: green;">Your email has been authenticated successfully!</p>
+        {% else %}
+            <p style="color: red;">Your email is not registered!</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
