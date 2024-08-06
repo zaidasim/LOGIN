@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render,redirect , get_object_or_404
 from .forms import CreateForm
 from .models import User
+from django.contrib.auth import get_user_model
+from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 def login_view(request):
@@ -41,3 +43,17 @@ def update(request):
     else:
         form=CreateForm(instance=profile)
     return render(request, 'profile_update.html' , {'form':form})
+User = get_user_model()
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            if not User.objects.filter(email=email).exists():
+                user = User.objects.create_user(email=email)
+                return redirect('registration_success')  # Redirect to a success page
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'register.html', {'form': form})
